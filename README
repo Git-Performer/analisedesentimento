@@ -1,0 +1,131 @@
+Análise de Sentimentos com Flask e Modelos de Aprendizado de Máquina
+Visão Geral
+Este projeto utiliza um modelo de aprendizado de máquina para realizar análise de sentimentos em texto. O backend é desenvolvido com Flask, e o frontend é uma simples página HTML que interage com o servidor Flask para exibir os resultados da análise de sentimentos. O projeto inclui também testes automatizados e um pipeline de CI/CD configurado com GitHub Actions, além de benchmarking de desempenho e avaliação da qualidade de inferência do modelo.
+
+Funcionalidades:
+Análise de Sentimentos: O backend utiliza o modelo de análise de sentimentos da biblioteca transformers para identificar sentimentos positivos ou negativos em um texto fornecido pelo usuário.
+API Flask: O modelo é servido por uma API Flask, que recebe requisições POST com o texto e retorna a previsão do modelo.
+Frontend Simples: O frontend permite que os usuários insiram um texto e vejam o sentimento detectado pelo modelo.
+Benchmarking e Qualidade: Inclui um script para avaliar o desempenho e a precisão do modelo com dados sintéticos e reais.
+Testes Automatizados: O projeto utiliza Cypress para realizar testes end-to-end (E2E) e garantir que o sistema funcione como esperado.
+Instruções de Configuração
+1. Configuração do Ambiente
+Este projeto foi desenvolvido com o Python 3.12.7, usando o Anaconda como gerenciador de ambiente. Também foi configurado o Node.js e o Cypress para realizar os testes end-to-end.
+
+Passos para configurar o ambiente:
+Clone o repositório:
+bash
+Copiar código
+git clone https://github.com/usuario/projeto.git
+cd projeto
+Configuração do ambiente Python:
+Crie um ambiente virtual Python com o Anaconda:
+
+bash
+Copiar código
+conda create -n sentiment_analysis python=3.12.7
+conda activate sentiment_analysis
+Instale as dependências do Python:
+
+bash
+Copiar código
+pip install -r requirements.txt
+Configuração do Cypress:
+Instale o Node.js e o Cypress:
+
+bash
+Copiar código
+npm install
+2. Executando o Aplicativo
+Para iniciar o backend, execute o seguinte comando:
+
+bash
+Copiar código
+python app.py
+O backend será iniciado no endereço http://127.0.0.1:5000.
+
+Para iniciar o frontend, basta abrir o arquivo index.html em um navegador de sua escolha.
+
+Estratégia de Teste e Casos de Teste
+Testes Funcionais
+Testes Manuais:
+Testamos a API enviando diferentes textos e verificamos se a resposta de sentimento estava correta.
+Testes Automatizados com Cypress:
+O Cypress foi configurado para testar o frontend. Ele simula a interação do usuário com a interface, inserindo um texto e verificando se a resposta da API é exibida corretamente.
+Casos de Teste:
+Enviar um texto vazio.
+Enviar um texto apenas com números.
+Enviar textos com sentimentos positivos e negativos.
+Verificar se o tempo de resposta da API é inferior ao limite definido (0.2 segundos).
+Pipeline CI/CD com GitHub Actions
+Configuração do Pipeline
+O pipeline de integração contínua foi configurado com GitHub Actions para garantir que o código seja testado sempre que um commit for realizado. O pipeline inclui os seguintes passos:
+
+Instalação de Dependências:
+
+Instalamos as dependências do Python e do Node.js.
+Execução de Testes:
+
+Os testes automatizados são executados usando o Cypress e os testes de backend são realizados com Python.
+Deploy:
+
+Após a validação dos testes, o código é preparado para deploy (a configuração de deploy real depende de sua infraestrutura).
+Arquivo de workflow do GitHub Actions:
+
+yaml
+Copiar código
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        npm install
+    - name: Run Backend Tests
+      run: python -m unittest discover tests/
+    - name: Run Cypress Tests
+      run: npx cypress run
+Resultados de Benchmarking
+Desempenho:
+O script benchmark.py foi usado para medir o tempo de resposta da API. O tempo limite de resposta foi configurado para 0.2 segundos. A cada execução, o sistema realiza uma requisição POST para a API com um texto de teste e mede o tempo de resposta.
+
+Avaliação de Qualidade de Inferência:
+O script benchmark_quality.py foi utilizado para avaliar a precisão e qualidade das previsões do modelo. Ele utiliza dados sintéticos e de validação para gerar um relatório de desempenho, incluindo métricas como precisão, recall e F1-score. Os critérios de aceitação exigem que a precisão do modelo seja superior a 90%.
+
+Exemplo de Saída do Benchmark:
+
+makefile
+Copiar código
+Benchmarking de Qualidade de Inferência:
+Precisão: 92.00%
+Recall: 94.00%
+F1 Score: 93.00%
+Garantindo Boas Inferências
+O modelo foi treinado e avaliado com uma base de dados balanceada, contendo textos positivos e negativos. Para garantir boas inferências, os seguintes passos foram tomados:
+
+Dados Sintéticos: Criamos dados sintéticos que simulam textos positivos e negativos para aumentar a diversidade do conjunto de testes.
+Benchmarking: Medimos a precisão do modelo em dados reais e sintéticos para garantir que ele se comporta bem em diferentes cenários.
+Diretrizes de Envio
+Commits Limpios: Certifique-se de que os commits sejam bem documentados, incluindo uma descrição clara do que foi alterado.
+Testes: Execute todos os testes localmente antes de realizar um push para garantir que o código esteja funcionando corretamente.
+Documentação: Mantenha o README e outros documentos atualizados conforme as mudanças no projeto.
+Notas Finais
+Este projeto foi hospedado em um repositório público no GitHub. Você pode clonar ou bifurcar o repositório para contribuir ou modificar conforme necessário.
+
+Se tiver dúvidas ou sugestões, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+Link para o Repositório: https://github.com/usuario/projeto

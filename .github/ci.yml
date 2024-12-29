@@ -1,0 +1,78 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      flask:
+        image: tiangolo/uwsgi-nginx-flask:python3.8
+        ports:
+          - 5000:5000
+        options: >-
+          --env FLASK_APP=app.py
+          --env FLASK_ENV=development
+        command: flask run --host=0.0.0.0 --port=5000
+
+    steps:
+      # Configuração inicial
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # Configuração do Python 3.8
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      # Instalação de dependências do Python
+      - name: Install Python dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Configuração do Node.js (para Cypress)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      # Instalação das dependências do Node.js
+      - name: Install Node.js dependencies
+        run: npm install
+
+      # Inicialização do servidor Flask
+      - name: Start Flask server
+        run: |
+          source venv/bin/activate
+          python app.py &
+        env:
+          FLASK_APP: app.py
+          FLASK_ENV: development
+        timeout-minutes: 2
+
+      # Testes com Cypress
+      - name: Run Cypress tests
+        run: npx cypress run
+        env:
+          CYPRESS_baseUrl: "http://127.0.0.1:5000"
+
+      # Benchmarks de desempenho
+      - name: Run Performance Benchmark
+        run: |
+          source venv/bin/activate
+          python benchmark.py
+
+      # Benchmarks de qualidade de inferência
+      - name: Run Quality Benchmark
+        run: |
+          source venv/bin/activate
+          python benchmark_quality.py
