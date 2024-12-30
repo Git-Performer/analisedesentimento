@@ -34,54 +34,26 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install Node.js dependencies
-        run: npm ci
-
-      # Instalação do Cypress
-      - name: Install Cypress
-        run: npx cypress install
-
-      # Instalação do Chromium (necessário para o Cypress headless)
-      - name: Install Chromium
-        run: sudo apt-get install -y chromium-browser
-
-      # Verificação da versão do Cypress e do navegador
-      - name: Verify Cypress version
-        run: npx cypress --version
-
-      - name: Verify Chromium installation
-        run: which chromium-browser || echo "Chromium is not installed"
+        run: npm install
 
       # Inicialização do servidor Flask
       - name: Start Flask server
         run: |
           source venv/bin/activate
-          flask run --host=0.0.0.0 --port=5000 > flask.log 2>&1 &
+          nohup python app.py > flask.log 2>&1 &
         env:
           FLASK_APP: app.py
           FLASK_ENV: development
-        timeout-minutes: 2
 
-      # Aguarde o servidor iniciar
-      - name: Wait for Flask server
-        run: sleep 10
-
-      # Limpeza do cache do Cypress
-      - name: Clear Cypress cache
-        run: npx cypress cache clear
-
-      # Testes com Cypress usando Electron ou Chromium
-      - name: Run Cypress tests
+      # Benchmarks de desempenho
+      - name: Run Performance Benchmark
         run: |
-          npx cypress run --headless --browser electron > cypress.log 2>&1
-        env:
-          DEBUG: cypress:*
-          CYPRESS_baseUrl: "http://127.0.0.1:5000"
+          source venv/bin/activate
+          python benchmark.py
 
-      # Upload de logs para depuração
-      - name: Upload logs
-        uses: actions/upload-artifact@v3
-        with:
-          name: logs
-          path: |
-            flask.log
-            cypress.log
+      # Benchmarks de qualidade de inferência
+      - name: Run Quality Benchmark
+        run: |
+          source venv/bin/activate
+          python benchmark_quality.py
+

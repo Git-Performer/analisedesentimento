@@ -1,6 +1,6 @@
 
 
-DevTools listening on ws://127.0.0.1:63736/devtools/browser/2736a363-8f03-45d1-bd8b-e6dfb1dc511e
+DevTools listening on ws://127.0.0.1:49570/devtools/browser/b7fe74c4-1825-432a-8fe1-5526ed4e911e
 
 ====================================================================================================
 
@@ -21,66 +21,34 @@ DevTools listening on ws://127.0.0.1:63736/devtools/browser/2736a363-8f03-45d1-b
 
 
   Sentiment Analysis Tests
-    √ Should return a prediction for valid text (95ms)
-    √ Should return a prediction for valid text in Portuguese (60ms)
-    √ Should handle empty text (16ms)
-    √ Should handle numeric-only input (15ms)
-    √ Should handle text with special characters (53ms)
-    √ Should clear the text input and result when the clear button is clicked (559ms)
+    √ Should return a prediction for valid text (323ms)
+    √ Should return a prediction for valid text in Portuguese (114ms)
+    √ Should handle empty text (15ms)
+    √ Should handle numeric-only input (17ms)
+    √ Should handle text with special characters (54ms)
+    √ Should clear the text input and result when the clear button is clicked (550ms)
 
   Performance Benchmark
-    1) Should respond within acceptable time
+[ 'Tempo de resposta: 41 ms' ]
+    √ Should respond within acceptable time (62ms)
 
 
-  6 passing (3s)
-  1 failing
-
-  1) Performance Benchmark
-       Should respond within acceptable time:
-     CypressError: `cy.task('log')` failed with the following error:
-
-The 'task' event has not been registered in the setupNodeEvents method. You must register it before using cy.task()
-
-Fix this in your setupNodeEvents method here:
-C:\Users\jhona\Backup do projeto\ML SENTIMENTOS\cypress.config.js
-
-https://on.cypress.io/api/task
-      at <unknown> (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:135115:72)
-      at tryCatcher (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:1830:23)
-      at Promise._settlePromiseFromHandler (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:1542:31)
-      at Promise._settlePromise (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:1599:18)
-      at Promise._settlePromise0 (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:1644:10)
-      at Promise._settlePromises (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:1720:18)
-      at _drainQueueStep (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:2430:12)
-      at _drainQueue (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:2423:9)
-      at Async._drainQueues (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:2439:5)
-      at Async.drainQueues (http://127.0.0.1:5500/__cypress/runner/cypress_runner.js:2309:14)
-  From Your Spec Code:
-      at Context.eval (webpack:///./cypress/e2e/sentiment_analysis.cy.js:96:12)
-
-
+  7 passing (3s)
 
 
   (Results)
 
   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
   │ Tests:        7                                                                                │
-  │ Passing:      6                                                                                │
-  │ Failing:      1                                                                                │
+  │ Passing:      7                                                                                │
+  │ Failing:      0                                                                                │
   │ Pending:      0                                                                                │
   │ Skipped:      0                                                                                │
-  │ Screenshots:  1                                                                                │
+  │ Screenshots:  0                                                                                │
   │ Video:        false                                                                            │
-  │ Duration:     3 seconds                                                                        │
+  │ Duration:     2 seconds                                                                        │
   │ Spec Ran:     sentiment_analysis.cy.js                                                         │
   └────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-
-  (Screenshots)
-
-  -  C:\Users\jhona\Backup do projeto\ML SENTIMENTOS\cypress\screenshots\sentiment_an     (1280x720)
-     alysis.cy.js\Performance Benchmark -- Should respond within acceptable time (fai               
-     led).png                                                                                       
 
 
 ====================================================================================================
@@ -90,7 +58,7 @@ https://on.cypress.io/api/task
 
        Spec                                              Tests  Passing  Failing  Pending  Skipped  
   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ ×  sentiment_analysis.cy.js                 00:03        7        6        1        -        - │
+  │ √  sentiment_analysis.cy.js                 00:02        7        7        -        -        - │
   └────────────────────────────────────────────────────────────────────────────────────────────────┘
-    ×  1 of 1 failed (100%)                     00:03        7        6        1        -        -  
+    √  All specs passed!                        00:02        7        7        -        -        -  
 
