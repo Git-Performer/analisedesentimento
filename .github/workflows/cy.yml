@@ -75,4 +75,6 @@ jobs:
       # Benchmarks de qualidade de inferência
       - name: Run Quality Benchmark
         run: |
+          source venv/bin/activate
           python benchmark_quality.py
+
