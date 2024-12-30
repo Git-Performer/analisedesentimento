@@ -34,26 +34,61 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install Node.js dependencies
-        run: npm install
+        run: npm ci
+
+      # Instalação do Cypress
+      - name: Install Cypress
+        run: npx cypress install
+
+      # Instalação do Chromium (necessário para o Cypress headless)
+      - name: Install Chromium
+        run: sudo apt-get install -y chromium-browser
 
       # Inicialização do servidor Flask
       - name: Start Flask server
         run: |
           source venv/bin/activate
-          nohup python app.py > flask.log 2>&1 &
+          flask run --host=0.0.0.0 --port=5000 > flask.log 2>&1 &
         env:
           FLASK_APP: app.py
           FLASK_ENV: development
+        timeout-minutes: 2
 
-      # Benchmarks de desempenho
-      - name: Run Performance Benchmark
+      # Aguarde até que o Flask esteja pronto para aceitar conexões
+      - name: Wait for Flask server to be available
+        run: |
+          for i in {1..30}; do
+            if curl --silent --fail http://127.0.0.1:5000/predict; then
+              echo "Flask server is up!"
+              break
+            else
+              echo "Waiting for Flask to be available..."
+              sleep 1
+            fi
+          done
+          
+      # Testes com Cypress usando Electron
+      - name: Run Cypress tests
+        run: |
+          npx cypress run --headless --browser electron > cypress.log 2>&1
+        env:
+          DEBUG: cypress:*
+          CYPRESS_baseUrl: "http://127.0.0.1:5000"
+
+      # Executa o benchmark após a confirmação de que o Flask está rodando
+      - name: Run benchmark
         run: |
           source venv/bin/activate
           python benchmark.py
+        env:
+          FLASK_APP: app.py
 
-      # Benchmarks de qualidade de inferência
-      - name: Run Quality Benchmark
-        run: |
-          source venv/bin/activate
-          python benchmark_quality.py
+      # Upload de logs para depuração
+      - name: Upload logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs
+          path: |
+            flask.log
+            cypress.log
 
