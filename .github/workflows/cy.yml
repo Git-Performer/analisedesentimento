@@ -40,10 +40,6 @@ jobs:
       - name: Install Cypress
         run: npx cypress install
 
-      # Instalação do Chromium (necessário para o Cypress headless)
-      - name: Install Chromium
-        run: sudo apt-get install -y chromium-browser
-
       # Inicialização do servidor Flask
       - name: Start Flask server
         run: |
@@ -55,7 +51,7 @@ jobs:
         timeout-minutes: 2
 
       # Aguarde até que o Flask esteja pronto para aceitar conexões
-      - name: Wait for Flask server to be available
+      - name: Wait for Flask server
         run: |
           for i in {1..30}; do
             if curl --silent --fail http://127.0.0.1:5000/predict; then
@@ -67,10 +63,10 @@ jobs:
             fi
           done
           
-      # Testes com Cypress usando Electron
+      # Testes com Cypress usando Firefox
       - name: Run Cypress tests
         run: |
-          npx cypress run 
+          npx cypress run --headless --browser firefox
         env:
           DEBUG: cypress:*
           CYPRESS_baseUrl: "http://127.0.0.1:5000"
