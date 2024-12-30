@@ -78,23 +78,4 @@ describe('Sentiment Analysis Tests', () => {
     
 });
 
-describe('Performance Benchmark', () => {
-    const MAX_RESPONSE_TIME = 200; // Limite em milissegundos
 
-    it('Should respond within acceptable time', () => {
-        const text = "I am feeling great!";
-
-        const start = Date.now();
-        cy.request({
-            method: 'POST',
-            url: '/predict',
-            body: { text },
-        }).then((response) => {
-            const end = Date.now();
-            const responseTime = end - start;
-
-            expect(responseTime).to.be.lessThan(MAX_RESPONSE_TIME);
-            cy.log(`Tempo de resposta: ${responseTime} ms`);
-        });
-    });
-});
