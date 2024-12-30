@@ -34,6 +34,11 @@ jobs:
         with:
           node-version: 16
 
+      # Limpeza do cache do pip
+      - name: Clear pip cache
+        run: |
+          pip cache purge
+
       # Instalação de dependências
       - name: Install Python dependencies
         run: |
