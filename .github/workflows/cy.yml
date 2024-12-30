@@ -10,6 +10,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      flask:
+        image: tiangolo/uwsgi-nginx-flask:python3.8
+        ports:
+          - 5000:5000
+        options: >-
+          --env FLASK_APP=app.py
+          --env FLASK_ENV=development
+
     steps:
       # Configuração inicial
       - name: Check out code
@@ -40,10 +49,11 @@ jobs:
       - name: Start Flask server
         run: |
           source venv/bin/activate
-          nohup python app.py > flask.log 2>&1 &
+          flask run --host=0.0.0.0 --port=5000 &
         env:
           FLASK_APP: app.py
           FLASK_ENV: development
+        timeout-minutes: 2
 
       # Testes com Cypress
       - name: Run Cypress tests
