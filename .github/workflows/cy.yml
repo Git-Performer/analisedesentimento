@@ -52,9 +52,9 @@ jobs:
 
       # Instalação do Cypress
       - name: Install Cypress
-        run: npx cypress install
+        run: npm install cypress --save-dev
 
-      # Ajuste de permissões do Cypress (no Ubuntu)
+      # Ajuste de permissões do Cypress
       - name: Set Cypress permissions
         run: chmod +x ./node_modules/.bin/cypress
 
@@ -85,6 +85,7 @@ jobs:
         run: |
           source venv/bin/activate
           python benchmark_quality.py
+
 
 
 
