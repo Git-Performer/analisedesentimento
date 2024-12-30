@@ -16,7 +16,7 @@ Passos para configurar o ambiente:
 Clone o repositório:
 bash
 Copiar código
-git clone https://github.com/usuario/projeto.git
+git clone https://github.com/Git-Executor/analisesentimento.git
 cd projeto
 Configuração do ambiente Python:
 Crie um ambiente virtual Python com o Anaconda:
@@ -67,38 +67,7 @@ Instalamos as dependências do Python e do Node.js.
 Execução de Testes:
 
 Os testes automatizados são executados usando o Cypress e os testes de backend são realizados com Python.
-Deploy:
 
-Após a validação dos testes, o código é preparado para deploy (a configuração de deploy real depende de sua infraestrutura).
-Arquivo de workflow do GitHub Actions:
-
-yaml
-Copiar código
-name: CI/CD Pipeline
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.12'
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        npm install
-    - name: Run Backend Tests
-      run: python -m unittest discover tests/
-    - name: Run Cypress Tests
-      run: npx cypress run
 Resultados de Benchmarking
 Desempenho:
 O script benchmark.py foi usado para medir o tempo de resposta da API. O tempo limite de resposta foi configurado para 0.2 segundos. A cada execução, o sistema realiza uma requisição POST para a API com um texto de teste e mede o tempo de resposta.
