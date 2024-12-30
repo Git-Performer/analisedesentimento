@@ -10,17 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      flask:
-        image: tiangolo/uwsgi-nginx-flask:python3.8
-        ports:
-          - 5000:5000
-        options: >-
-          --env FLASK_APP=app.py
-          --env FLASK_ENV=development
-
     steps:
-      # Configuração inicial
       - name: Check out code
         uses: actions/checkout@v3
 
@@ -34,12 +24,6 @@ jobs:
         with:
           node-version: 16
 
-      # Limpeza do cache do pip
-      - name: Clear pip cache
-        run: |
-          pip cache purge
-
-      # Instalação de dependências
       - name: Install Python dependencies
         run: |
           python -m venv venv
@@ -48,26 +32,14 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install Node.js dependencies
-        run: npm install
+        run: npm ci
 
-      # Configuração do cache do Cypress
-      - name: Cache Cypress
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-cypress-
-
-      # Instalação do Cypress
       - name: Install Cypress
         run: npx cypress install
 
-      # Ajuste de permissões do Cypress
       - name: Set Cypress permissions
-        run: chmod +x ./node_modules/.bin/cypress
+        run: chmod +x $(npm bin)/cypress
 
-      # Inicialização do servidor Flask
       - name: Start Flask server
         run: |
           source venv/bin/activate
@@ -77,27 +49,7 @@ jobs:
           FLASK_ENV: development
         timeout-minutes: 2
 
-      # Testes com Cypress
       - name: Run Cypress tests
-        run: npx cypress run
+        run: npx cypress run --verbose
         env:
           CYPRESS_baseUrl: "http://127.0.0.1:5000"
-
-      # Benchmarks de desempenho
-      - name: Run Performance Benchmark
-        run: |
-          source venv/bin/activate
-          python benchmark.py
-
-      # Benchmarks de qualidade de inferência
-      - name: Run Quality Benchmark
-        run: |
-          source venv/bin/activate
-          python benchmark_quality.py
-
-
-
-
-
-
-
