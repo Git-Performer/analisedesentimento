@@ -50,6 +50,10 @@ jobs:
       - name: Install Node.js dependencies
         run: npm install
 
+      # Ajuste de permissões do Cypress (no Ubuntu)
+      - name: Set Cypress permissions
+        run: chmod +x ./node_modules/.bin/cypress
+
       # Inicialização do servidor Flask
       - name: Start Flask server
         run: |
@@ -77,6 +81,7 @@ jobs:
         run: |
           source venv/bin/activate
           python benchmark_quality.py
+
 
 
 
