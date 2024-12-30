@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from transformers import pipeline
 from flask_cors import CORS
+import re  # Import para regex
 
 # Função para mapear estrelas para rótulos
 def map_sentiment(label):
@@ -20,11 +21,20 @@ CORS(app)
 def predict():
     try:
         text = request.json.get('text', '').strip()
+
+        # Verifica se o texto é vazio
         if not text:
             return jsonify({"error": "Texto inválido ou vazio."}), 400
+        
+        # Verifica se o texto é somente numérico
         if text.isdigit():
             return jsonify({"error": "Texto inválido: insira um texto com palavras."}), 400
 
+        # Verifica se o texto contém apenas caracteres especiais
+        if not re.search(r'\w', text):  # '\w' verifica se há pelo menos um caractere alfanumérico
+            return jsonify({"error": "Texto inválido: insira um texto válido."}), 400
+
+        # Faz a previsão usando o modelo
         prediction = model(text)
         sentiment = map_sentiment(prediction[0]['label'])
         confidence = prediction[0]['score']
