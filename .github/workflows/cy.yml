@@ -40,6 +40,17 @@ jobs:
       - name: Install Cypress
         run: npx cypress install
 
+      # Instalação do Chromium (necessário para o Cypress headless)
+      - name: Install Chromium
+        run: sudo apt-get install -y chromium-browser
+
+      # Verificação da versão do Cypress e do navegador
+      - name: Verify Cypress version
+        run: npx cypress --version
+
+      - name: Verify Chromium installation
+        run: which chromium-browser || echo "Chromium is not installed"
+
       # Inicialização do servidor Flask
       - name: Start Flask server
         run: |
@@ -54,7 +65,11 @@ jobs:
       - name: Wait for Flask server
         run: sleep 10
 
-      # Testes com Cypress usando Electron
+      # Limpeza do cache do Cypress
+      - name: Clear Cypress cache
+        run: npx cypress cache clear
+
+      # Testes com Cypress usando Electron ou Chromium
       - name: Run Cypress tests
         run: |
           npx cypress run --headless --browser electron > cypress.log 2>&1
@@ -70,5 +85,3 @@ jobs:
           path: |
             flask.log
             cypress.log
-
-
