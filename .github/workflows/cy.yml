@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Configuração inicial
       - name: Check out code
         uses: actions/checkout@v3
 
@@ -24,6 +25,7 @@ jobs:
         with:
           node-version: 16
 
+      # Instalação de dependências
       - name: Install Python dependencies
         run: |
           python -m venv venv
@@ -34,12 +36,11 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
+      # Instalação do Cypress
       - name: Install Cypress
         run: npx cypress install
 
-      - name: Set Cypress permissions
-        run: chmod +x $(npm bin)/cypress
-
+      # Inicialização do servidor Flask
       - name: Start Flask server
         run: |
           source venv/bin/activate
@@ -49,9 +50,25 @@ jobs:
           FLASK_ENV: development
         timeout-minutes: 2
 
+      # Aguarde o servidor iniciar
+      - name: Wait for Flask server
+        run: sleep 10
+
+      # Testes com Cypress usando Electron
       - name: Run Cypress tests
-        run: npx cypress run --headless --browser chrome
+        run: |
+          npx cypress run --headless --browser electron > cypress.log 2>&1
         env:
           DEBUG: cypress:*
           CYPRESS_baseUrl: "http://127.0.0.1:5000"
+
+      # Upload de logs para depuração
+      - name: Upload logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs
+          path: |
+            flask.log
+            cypress.log
+
 
