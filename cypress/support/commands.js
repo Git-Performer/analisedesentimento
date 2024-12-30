@@ -1,25 +1,14 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+// Sobrescreve o comando `cy.log` para adicionar suporte a logs no modo headless
+Cypress.Commands.overwrite("log", (originalLog, ...args) => {
+    if (Cypress.browser.isHeadless) {
+      // Envia os logs para o terminal no modo headless
+      return cy.task("log", args, { log: false }).then(() => {
+        return originalLog(...args);
+      });
+    } else {
+      // Exibe os logs diretamente no console do navegador no modo GUI
+      console.log(...args);
+      return originalLog(...args);
+    }
+  });
+  
