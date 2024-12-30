@@ -50,9 +50,18 @@ jobs:
       - name: Install Node.js dependencies
         run: npm install
 
+      # Configuração do cache do Cypress
+      - name: Cache Cypress
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-
+
       # Instalação do Cypress
       - name: Install Cypress
-        run: npm install cypress --save-dev
+        run: npx cypress install
 
       # Ajuste de permissões do Cypress
       - name: Set Cypress permissions
@@ -85,6 +94,7 @@ jobs:
         run: |
           source venv/bin/activate
           python benchmark_quality.py
+
 
 
 
