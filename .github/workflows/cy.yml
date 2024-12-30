@@ -66,6 +66,14 @@ jobs:
               sleep 1
             fi
           done
+          
+      # Testes com Cypress usando Electron
+      - name: Run Cypress tests
+        run: |
+          npx cypress run --headless --browser electron > cypress.log 2>&1
+        env:
+          DEBUG: cypress:*
+          CYPRESS_baseUrl: "http://127.0.0.1:5000"
 
       # Executa o benchmark após a confirmação de que o Flask está rodando
       - name: Run benchmark
@@ -83,5 +91,3 @@ jobs:
           path: |
             flask.log
             cypress.log
-
-
